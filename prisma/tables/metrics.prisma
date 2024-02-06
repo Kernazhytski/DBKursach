@@ -1,0 +1,10 @@
+model Metrics {
+  id Int @id @default(autoincrement())
+
+  type       MetricsType
+  value      Float
+  created_at DateTime    @default(now())
+
+  User    User   @relation(fields: [user_id], references: [id])
+  user_id String
+}

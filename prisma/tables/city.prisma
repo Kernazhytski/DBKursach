@@ -1,0 +1,10 @@
+model City {
+  id Int @id
+
+  name String
+
+  country    Country      @relation(fields: [country_id], references: [id])
+  country_id Int
+
+  Labaratory Labaratory[]
+}

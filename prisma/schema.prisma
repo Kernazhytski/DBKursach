@@ -1,0 +1,254 @@
+model City {
+  id Int @id
+
+  name String
+
+  country    Country      @relation(fields: [country_id], references: [id])
+  country_id Int
+
+  Labaratory Labaratory[]
+}
+model Country {
+  id Int @id
+
+  name String
+
+  City City[]
+}
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+model Labaratory {
+  id Int @id
+
+  constructedYear   Int
+  constructedMounth Int
+  constructedDay    Int
+
+  city    City @relation(references: [id], fields: [city_id])
+  city_id Int
+
+  name String
+
+  User User[]
+}
+model Metrics {
+  id Int @id @default(autoincrement())
+
+  type       MetricsType
+  value      Float
+  created_at DateTime    @default(now())
+
+  User    User   @relation(fields: [user_id], references: [id])
+  user_id String
+}
+model Quiz {
+  id Int @id @default(autoincrement())
+
+  user    User   @relation(fields: [user_id], references: [id])
+  user_id String
+
+  question    QuizQuestions
+  answer      Int
+  answer_date DateTime      @default(now())
+}
+model TestResults {
+  id String @id
+
+  user    User   @relation(fields: [user_id], references: [id])
+  user_id String
+
+  type  TestType
+  value Float
+  unit  TestUnits
+
+  TestYear   Int
+  TestMounth Int
+  TestDay    Int
+}
+model User {
+  id     String  @id
+  name   String
+  gender Gender
+  phone  String?
+  email  String?
+  year   Int
+  mounth Int
+  day    Int
+
+  labaratory    Labaratory @relation(fields: [labaratory_id], references: [id])
+  labaratory_id Int
+
+  Metrics   Metrics[]
+  Quiz      Quiz[]
+  TestResults TestResults[]
+}
+enum Gender {
+  MALE
+  FEMALE
+}
+enum MetricsType {
+  biologicalAgeWithTests
+  biologicalAgeWithoutTests
+  agingRateCoefficient
+  organism
+  commonScrining
+  liver
+  genitourinary
+  heart
+  blood
+  harmonics
+  digestion
+  immunity
+  nervous
+  respiratory
+}
+enum QuizQuestions {
+  // Базовый опрос
+  Weight // Вес
+  Height // Рост
+  WaistCircumference // Длина бедра
+  HipCircumference // Длина талии
+}
+enum TestType {
+  ESR_VENOUS_BLOOD
+  OSTEOCALCIN
+  ALT_ALANINE_AMINOTRANSFERASE
+  ALBUMEN
+  PANCREATIC_AMYLASE
+  ASL_O_ANTISTREPTOLYSIN_O
+  AST_ASPARTATE_AMINOTRANSFERASE
+  GAMMA_GLUTAMYLTRANSPEPTIDASE
+  GLUCOSE_IN_BLOOD
+  HOMOCYSTEINE
+  IRON
+  TOTAL_CALCIUM
+  CREATINEKINASE_COMMON
+  LIPASE
+  MAGNESIUM
+  URIC_ACID_IN_SERUM
+  UREA_IN_BLOOD
+  TOTAL_PROTEIN_IN_BLOOD
+  TOTAL_BILIRUBIN
+  FERRITIN
+  ALKALINE_PHOSPHATASE
+  INORGANIC_PHOSPHORUS
+  CHOLINESTERASE
+  CALCIUM_IN_URINE
+  CREATININE_IN_URINE
+  TOTAL_PROTEIN_IN_LIQUOR
+  PYRILINKS_D
+  NT_PROBNP
+  BONE_MATRIX_FORMING_MARKER_P1NP
+  TOTAL_IMMUNOGLOBULINS_A_IN_SERUM
+  TOTAL_IMMUNOGLOBULINS_G_IN_SERUM
+  TOTAL_IMMUNOGLOBULINS_M_IN_SERUM
+  ALPHA_FETOPROTEIN_AFP
+  TOTAL_IMMUNOGLOBULINS_E_IN_SERUM
+  SEXHORMONE_BINDING_GLOBULIN
+  INSULINLIKE_GROWTH_FACTOR
+  LEPTIN
+  DEHYDROEPIANDROSTERONESULFATE
+  TRIIODOTHYRONINE_TOTAL
+  TYROXIN_GENERAL
+  FOLLICLESTIMULATING_HORMONE
+  T3_Triiodothyronine_Reverse
+  T4_THYROXINE_FREE
+  T3_TRIIODOTHYRONINE_FREE
+  ANTIBODIES_TO_GLIADIN_IGA
+  ANTIBODIES_TO_GLIADIN_IGG
+  ANGIOTENSIN_CONVERTING_ENZYME_SERUM
+  ANTI_CHLAMYDIA_TR_IGG_IGG_ANTIBODIES_TO_CHLAMYDIA_TRACHOMATIS
+  ANTI_TG_ANTITHYROGLOBULIN_ANTIBODIES
+  ANTI_TPO_ANTIBODIES_TO_MICROSOMAL_THYROID_PEROXIDASE
+  ANTIBODIES_TO_THYROID_STIMULATING_HORMONE_RECEPTORS_AT_RTSH
+  GLYCATED_HEMOGLOBIN_A1C
+  CALCITONIN
+  PSA_TOTAL_PROSTATE_SPECIFIC_ANTIGEN_TOTAL
+  PARATHYROID_HORMONE_PARATHYROID_HORMONE
+  PROTHROMBIN_TIME_ACCORDING_TO_QUICK_INR
+  RHEUMATOID_FACTOR_RF
+  C_REACTIVE_PROTEIN
+  GLOMERULAR_FILTRATION_RATE_BLOOD
+  TSH_THYROID_STIMULATING_HORMONE
+  THYROGLOBULIN
+  TRIGLYCERIDES
+  TROPONIN_I
+  FIBRINOGEN
+  TOTAL_CHOLESTEROL
+  HDL_CHOLESTEROL_HIGH_DENSITY_LIPOPROTEIN_CHOLESTEROL
+  LDL_CHOLESTEROL_LOW_DENSITY_LIPOPROTEIN_CHOLESTEROL
+  GASTRIN_17
+  PEPSINOGEN_I
+  PEPSYNOGEN_II
+  ANTIBODIES_TO_CYCLIC_CITRULLINATED_PEPTIDE_ACCP
+  DIRECT_BILIRUBIN
+  CREATININE_IN_BLOOD
+  MICROALBUMIN_IN_A_SINGLE_URINE_SAMPLE
+  MYOGLOBIN
+  UREA
+  NA_IN_BLOOD
+  K_IN_BLOOD
+  CL_IN_BLOOD
+  PSA_FREE_PROSTATE_SPECIFIC_ANTIGEN_FREE
+  APOLIPOPROTEINA1
+  APOLIPOPROTEINB
+  LEUKOCYTES
+  ERYTHROCYTES
+  HEMOGLOBIN
+  HEMATOCRIT
+  MCV
+  MCH
+  MCHC
+  THROMBOCYTES
+  RDW_SD
+  RDW_CV
+  PDW
+  MPV
+  P_LCR
+  NEUTROPHILS
+  LYMPHOCYTES
+  MONOCYTES
+  EOSINOPHILS
+  BASOPHILS
+  COE
+}
+enum TestUnits {
+  MILIMOL_PER_LITER
+  MICROMOL_PER_LITER
+  PERCENT
+  GRAM_PER_LITER
+  PIKAGRAM_PER_MILILITER
+  MG_PER_LITER
+  MG_PER_MILILITER
+  UNITS
+  MILIMETR_PER_HOUR
+  NANAGRAM_PER_MILILITER
+  NANAGRAM_PER_LITER
+  UNIT_PER_LITER
+  UNIT_PER_MILILITER
+  MILIMOL_PER_DAY
+  MG_PER_DAY
+  NANOMOL
+  NANOMOL_PER_LITER
+  MICROGRAM_PER_DECELITER
+  MICROGRAM_PER_LITER
+  MNO
+  MICROUNIT_PER_MILILITER
+  PIKAMOL_PER_LITER
+  MILIUNIT_PER_MILILITER
+  PIKAGRAM_PER_LITER
+  FEMTOLITER
+  PIKAGRAM
+  GIGAUNITS_PER_LITER
+  TERAUNITS_PER_LITER
+  V_POLE_ZRENII
+  GRAM_PER_DECELITRE
+  MEGAUNITS_PER_MICROLITER
+  KILOUNITS_PER_MICROLITER
+}

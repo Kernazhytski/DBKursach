@@ -1,0 +1,14 @@
+model Labaratory {
+  id Int @id
+
+  constructedYear   Int
+  constructedMounth Int
+  constructedDay    Int
+
+  city    City @relation(references: [id], fields: [city_id])
+  city_id Int
+
+  name String
+
+  User User[]
+}

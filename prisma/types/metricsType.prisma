@@ -1,0 +1,16 @@
+enum MetricsType {
+  biologicalAgeWithTests
+  biologicalAgeWithoutTests
+  agingRateCoefficient
+  organism
+  commonScrining
+  liver
+  genitourinary
+  heart
+  blood
+  harmonics
+  digestion
+  immunity
+  nervous
+  respiratory
+}

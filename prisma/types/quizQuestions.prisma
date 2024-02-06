@@ -1,0 +1,7 @@
+enum QuizQuestions {
+  // Базовый опрос
+  Weight // Вес
+  Height // Рост
+  WaistCircumference // Длина бедра
+  HipCircumference // Длина талии
+}

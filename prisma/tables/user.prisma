@@ -1,0 +1,17 @@
+model User {
+  id     String  @id
+  name   String
+  gender Gender
+  phone  String?
+  email  String?
+  year   Int
+  mounth Int
+  day    Int
+
+  labaratory    Labaratory @relation(fields: [labaratory_id], references: [id])
+  labaratory_id Int
+
+  Metrics   Metrics[]
+  Quiz      Quiz[]
+  TestResults TestResults[]
+}

@@ -1,0 +1,7 @@
+model Country {
+  id Int @id
+
+  name String
+
+  City City[]
+}
