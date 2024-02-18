@@ -1,5 +1,5 @@
 model Labaratory {
-  id Int @id
+  id Int @id @default(autoincrement())
 
   constructedYear   Int
   constructedMounth Int

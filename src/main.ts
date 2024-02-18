@@ -16,6 +16,13 @@ async function bootstrap() {
   // Применяем глобальный ValidationPipe
   app.useGlobalPipes(validationPipe);
 
+  app.enableCors({
+    origin: 'http://localhost:3001',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+    exposedHeaders: ['x-request-id'],
+  });
+
   await app.listen(3000);
 
   console.log(`Works on port ${3000}`);

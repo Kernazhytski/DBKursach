@@ -366,5 +366,30 @@ BEGIN
     RETURN user_data;
 END;
 
+CREATE FUNCTION getLabInfoById(labId INT)
+    RETURNS JSON
+    READS SQL DATA
+BEGIN
+    DECLARE labInfo JSON;
+
+    SELECT
+        JSON_OBJECT(
+                'lab_id', Labaratory.id,
+                'lab_name', Labaratory.name,
+                'constructedYear', Labaratory.constructedYear,
+                'constructedMounth', Labaratory.constructedMounth,
+                'constructedDay', Labaratory.constructedDay,
+                'city_name', City.name,
+                'country_name', Country.name
+        )
+    INTO labInfo
+    FROM Labaratory
+             JOIN City ON Labaratory.city_id = City.id
+             JOIN Country ON City.country_id = Country.id
+    WHERE Labaratory.id = labId;
+
+    RETURN labInfo;
+END;
+
 
 

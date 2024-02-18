@@ -32,7 +32,8 @@ export class UserService {
   }
 
   async getUsers(userGet: GetUserInfoDTO) {
-    const userIds = userGet.id.length > 0 ? JSON.stringify(userGet.id) : '[]';
+    console.log(userGet.id[0] === '');
+    const userIds = userGet.id[0] !== ' ' ? JSON.stringify(userGet.id) : '[]';
 
     const query = `SELECT GetUsersByIds(?) AS users`;
 
