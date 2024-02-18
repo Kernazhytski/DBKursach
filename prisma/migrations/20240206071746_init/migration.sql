@@ -317,3 +317,54 @@ BEGIN
             SET MESSAGE_TEXT = 'Country name must start with a capital letter and contain only English letters.';
     END IF;
 END;
+
+CREATE PROCEDURE InsertUser(
+    IN p_id VARCHAR(191),
+    IN p_name VARCHAR(191),
+    IN p_gender ENUM('MALE', 'FEMALE'),
+    IN p_phone VARCHAR(191),
+    IN p_email VARCHAR(191),
+    IN p_year INTEGER,
+    IN p_month INTEGER,
+    IN p_day INTEGER,
+    IN p_laboratory_id INTEGER
+)
+BEGIN
+    DECLARE new_id VARCHAR(191);
+
+    INSERT INTO `User` (
+        `id`,`name`, `gender`, `phone`, `email`, `year`, `mounth`, `day`, `labaratory_id`
+    ) VALUES (
+                     p_id,p_name, p_gender, p_phone, p_email, p_year, p_month, p_day, p_laboratory_id
+             );
+
+    SET new_id = LAST_INSERT_ID();
+
+    SELECT new_id AS new_user_id;
+END;
+
+CREATE FUNCTION GetUsersByIds(userIds TEXT)
+    RETURNS JSON
+    READS SQL DATA
+BEGIN
+    DECLARE user_data JSON;
+
+    IF JSON_LENGTH(userIds) = 0 THEN
+        SELECT JSON_ARRAYAGG(JSON_OBJECT('id', id, 'name', name, 'gender', gender, 'phone', phone, 'email', email, 'year', year, 'mounth', mounth, 'day', day, 'labaratory_id', labaratory_id))
+        INTO user_data
+        FROM User;
+    ELSE
+        SELECT JSON_ARRAYAGG(JSON_OBJECT('id', id, 'name', name, 'gender', gender, 'phone', phone, 'email', email, 'year', year, 'mounth', mounth, 'day', day, 'labaratory_id', labaratory_id))
+        INTO user_data
+        FROM User AS u
+        WHERE CONVERT(u.id USING utf8mb4) IN (
+            SELECT CONVERT(id USING utf8mb4)
+            FROM JSON_TABLE(userIds, '$[*]' COLUMNS (id VARCHAR(191) PATH '$')) AS ids
+        );
+    END IF;
+
+    RETURN user_data;
+END;
+
+
+
