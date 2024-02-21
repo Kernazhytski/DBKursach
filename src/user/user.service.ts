@@ -3,6 +3,7 @@ import { MysqlService } from '../mysql/mysql.service';
 import { CreateUserDTO } from './DTO/CreateUserDTO';
 import { v4 as uuidv4 } from 'uuid';
 import { GetUserInfoDTO } from './DTO/GetUserInfoDTO';
+import { EdituserDTO } from './DTO/EdituserDTO';
 
 @Injectable()
 export class UserService {
@@ -32,12 +33,41 @@ export class UserService {
   }
 
   async getUsers(userGet: GetUserInfoDTO) {
-    console.log(userGet.id[0] === '');
     const userIds = userGet.id[0] !== ' ' ? JSON.stringify(userGet.id) : '[]';
 
     const query = `SELECT GetUsersByIds(?) AS users`;
 
     const users = await this.mysqlProvider.query(query, [userIds]);
     return users[0];
+  }
+
+  async editUser(userInfo: EdituserDTO) {
+    const query = `
+    UPDATE \`User\`
+    SET 
+      name=?,
+      gender=?,
+      phone=?,
+      email=?,
+      year=?,
+      mounth=?,
+      day=?,
+      labaratory_id=?
+    WHERE id=?
+  `;
+
+    const birthDay = new Date(userInfo.birthDay);
+
+    await this.mysqlProvider.query(query, [
+      userInfo.name,
+      userInfo.gender,
+      userInfo.phone,
+      userInfo.email,
+      birthDay.getFullYear(),
+      birthDay.getMonth(),
+      birthDay.getDay(),
+      userInfo.labaratory,
+      userInfo.id,
+    ]);
   }
 }
