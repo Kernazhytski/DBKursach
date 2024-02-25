@@ -18,9 +18,9 @@ export class MysqlService {
     });
   }
 
-  isSafeSql(input: string): boolean {
+  private isSafeSql(input: string): boolean {
     // Заменяем символы, которые могут быть использованы в SQL-инъекциях
-    const sanitizedInput = input.replace(/['";]/g, '');
+    const sanitizedInput = input.replace(/['"]/g, '');
 
     // Сравниваем исходный ввод с очищенным вводом
     return input === sanitizedInput;
@@ -36,6 +36,27 @@ export class MysqlService {
       const [rows] = await connection.query(sql, values);
       console.log(rows);
       return rows;
+    } finally {
+      connection.release();
+    }
+  }
+
+  async parallelQuery(sqlArray: string[], values?: any[]) {
+    const connection = await this.pool.getConnection();
+
+    try {
+      await connection.beginTransaction();
+
+      for (const query of sqlArray) {
+        this.isSafeSql(query);
+
+        await connection.query(query, values);
+      }
+
+      await connection.commit();
+    } catch (error) {
+      await connection.rollback();
+      throw error;
     } finally {
       connection.release();
     }

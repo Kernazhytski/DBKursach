@@ -1,9 +1,19 @@
-import { Body, Controller, Get, Post, Query, Res } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Query,
+  Res,
+} from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDTO } from './DTO/CreateUserDTO';
 import { Response } from 'express';
 import { GetUserInfoDTO } from './DTO/GetUserInfoDTO';
 import { EdituserDTO } from './DTO/EdituserDTO';
+import { DeleteUserDTO } from './DTO/DeleteUserDTO';
 
 @Controller('user')
 export class UserController {
@@ -28,5 +38,12 @@ export class UserController {
     const responce = await this.userService.getUsers(getUserDTO);
 
     res.send(responce).status(200);
+  }
+
+  @Delete('delete/:id')
+  async deleteUsers(@Param() id: DeleteUserDTO, @Res() res: Response) {
+    await this.userService.deleteUser(id.id);
+
+    res.send('Deleted successfully').status(200);
   }
 }

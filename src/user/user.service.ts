@@ -70,4 +70,15 @@ export class UserService {
       userInfo.id,
     ]);
   }
+
+  async deleteUser(id: string) {
+    const queries: string[] = [
+      'DELETE FROM `Metrics` WHERE user_id = ?;',
+      'DELETE FROM `Quiz` WHERE user_id = ?;',
+      'DELETE FROM `TestResults` WHERE user_id = ?;',
+      'DELETE FROM `User` WHERE id = ?;',
+    ];
+
+    return await this.mysqlProvider.parallelQuery(queries, [id]);
+  }
 }
