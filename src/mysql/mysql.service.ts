@@ -26,6 +26,37 @@ export class MysqlService {
     return input === sanitizedInput;
   }
 
+  async upsert(
+    data: any[],
+    temporary: string,
+    fill: string,
+    transaction: string,
+  ) {
+    const connection = await this.pool.getConnection();
+
+    try {
+      await connection.beginTransaction();
+
+      // Создать временную таблицу для передачи массива значений
+      await connection.query(temporary);
+
+      // Заполнить временную таблицу значениями из массива
+      await connection.query(fill, data);
+
+      // Вставить или обновить записи в основной таблице
+      await connection.query(transaction);
+
+      await connection.commit();
+    } catch (error) {
+      await connection.rollback();
+      throw error;
+    } finally {
+      // Удалить временную таблицу
+      await connection.query('DROP TEMPORARY TABLE IF EXISTS temp');
+      connection.release();
+    }
+  }
+
   async query(sql: string, values?: any[]): Promise<any> {
     if (!this.isSafeSql(sql)) {
       throw new HttpException('SQL injections were found', 403);
