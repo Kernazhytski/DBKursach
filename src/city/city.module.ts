@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { CityService } from './city.service';
 import { CityController } from './city.controller';
-import { MysqlModule } from '../mysql/mysql.module';
+import { PrismaService } from '../prisma.service';
 
 @Module({
-  providers: [CityService],
+  providers: [CityService, PrismaService],
   controllers: [CityController],
-  imports: [MysqlModule],
+  imports: [],
 })
 export class CityModule {}

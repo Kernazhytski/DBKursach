@@ -1,5 +1,5 @@
 model City {
-  id Int @id
+  id Int @id @default(autoincrement())
 
   name String
 
@@ -9,7 +9,7 @@ model City {
   Labaratory Labaratory[]
 }
 model Country {
-  id Int @id
+  id Int @id @default(autoincrement())
 
   name String
 
@@ -24,7 +24,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 model Labaratory {
-  id Int @id
+  id Int @id @default(autoincrement())
 
   constructedYear   Int
   constructedMounth Int

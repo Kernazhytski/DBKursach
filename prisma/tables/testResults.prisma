@@ -1,5 +1,5 @@
 model TestResults {
-  id String @id @default(autoincrement())
+  id String @id
 
   user    User   @relation(fields: [user_id], references: [id])
   user_id String

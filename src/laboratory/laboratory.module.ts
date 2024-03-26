@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { LaboratoryService } from './laboratory.service';
 import { LaboratoryController } from './laboratory.controller';
-import { MysqlModule } from '../mysql/mysql.module';
+import { PrismaService } from '../prisma.service';
 
 @Module({
-  providers: [LaboratoryService],
-  imports: [MysqlModule],
+  providers: [LaboratoryService, PrismaService],
+  imports: [],
   controllers: [LaboratoryController],
 })
 export class LaboratoryModule {}

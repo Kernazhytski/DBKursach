@@ -1,84 +1,71 @@
 import { Injectable } from '@nestjs/common';
-import { MysqlService } from '../mysql/mysql.service';
 import { CreateUserDTO } from './DTO/CreateUserDTO';
 import { v4 as uuidv4 } from 'uuid';
 import { GetUserInfoDTO } from './DTO/GetUserInfoDTO';
 import { EdituserDTO } from './DTO/EdituserDTO';
+import { PrismaService } from '../prisma.service';
 
 @Injectable()
 export class UserService {
-  constructor(private readonly mysqlProvider: MysqlService) {}
+  constructor(private readonly prismService: PrismaService) {}
 
   async createUser(user: CreateUserDTO) {
-    const sql = `
-      CALL InsertUser(?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `;
-
     const birthDay = new Date(user.birthDay);
 
-    const values = [
-      uuidv4(),
-      user.name,
-      user.gender,
-      user.phone,
-      user.email,
-      birthDay.getFullYear(),
-      birthDay.getMonth(),
-      birthDay.getDay(),
-      user.labaratory,
-    ];
-
-    const result = await this.mysqlProvider.query(sql, values);
-    return result[0][0]; // Assuming the procedure returns a result set with the new user ID
+    await this.prismService.user.create({
+      data: {
+        id: uuidv4(),
+        name: user.name,
+        gender: user.gender,
+        phone: user.phone,
+        email: user.email,
+        year: birthDay.getFullYear(),
+        mounth: birthDay.getMonth(),
+        day: birthDay.getDay(),
+        labaratory_id: user.labaratory,
+      },
+    });
   }
 
   async getUsers(userGet: GetUserInfoDTO) {
-    const userIds = userGet.id[0] !== ' ' ? JSON.stringify(userGet.id) : '[]';
-
-    const query = `SELECT GetUsersByIds(?) AS users`;
-
-    const users = await this.mysqlProvider.query(query, [userIds]);
-    return users[0];
+    if (userGet.id[0] === ' ') {
+      const users = await this.prismService.user.findMany();
+      return { users };
+    } else {
+      const users = await this.prismService.user.findMany({
+        where: {
+          id: { in: userGet.id },
+        },
+      });
+      return { users };
+    }
   }
 
   async editUser(userInfo: EdituserDTO) {
-    const query = `
-    UPDATE \`User\`
-    SET 
-      name=?,
-      gender=?,
-      phone=?,
-      email=?,
-      year=?,
-      mounth=?,
-      day=?,
-      labaratory_id=?
-    WHERE id=?
-  `;
-
     const birthDay = new Date(userInfo.birthDay);
 
-    await this.mysqlProvider.query(query, [
-      userInfo.name,
-      userInfo.gender,
-      userInfo.phone,
-      userInfo.email,
-      birthDay.getFullYear(),
-      birthDay.getMonth(),
-      birthDay.getDay(),
-      userInfo.labaratory,
-      userInfo.id,
-    ]);
+    await this.prismService.user.update({
+      where: {
+        id: userInfo.id,
+      },
+      data: {
+        name: userInfo.name,
+        gender: userInfo.gender,
+        phone: userInfo.phone,
+        email: userInfo.email,
+        year: birthDay.getFullYear(),
+        mounth: birthDay.getMonth(),
+        day: birthDay.getDay(),
+        labaratory_id: userInfo.labaratory,
+      },
+    });
   }
 
   async deleteUser(id: string) {
-    const queries: string[] = [
-      'DELETE FROM `Metrics` WHERE user_id = ?;',
-      'DELETE FROM `Quiz` WHERE user_id = ?;',
-      'DELETE FROM `TestResults` WHERE user_id = ?;',
-      'DELETE FROM `User` WHERE id = ?;',
-    ];
-
-    return await this.mysqlProvider.parallelQuery(queries, [id]);
+    await this.prismService.user.delete({
+      where: {
+        id: id,
+      },
+    });
   }
 }

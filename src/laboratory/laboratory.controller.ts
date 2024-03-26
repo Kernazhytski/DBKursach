@@ -3,6 +3,7 @@ import { Response } from 'express';
 import { GetLaboratoryDTO } from './DTO/GetLaboratoryDTO';
 import { LaboratoryService } from './laboratory.service';
 import { EditListDTO } from './DTO/editListDTO';
+import { DelLabDTO } from './DTO/delLabDTO';
 
 @Controller('laboratory')
 export class LaboratoryController {
@@ -27,6 +28,12 @@ export class LaboratoryController {
     console.log(body);
     await this.laboratoryService.editAll(body.laboratories);
 
+    res.send('ok').status(200);
+  }
+
+  @Post('del')
+  async delLab(@Body() body: DelLabDTO, @Res() res: Response) {
+    await this.laboratoryService.del(body.id);
     res.send('ok').status(200);
   }
 }
