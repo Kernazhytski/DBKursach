@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { GetUserInfoDTO } from './DTO/GetUserInfoDTO';
 import { EdituserDTO } from './DTO/EdituserDTO';
 import { PrismaService } from '../prisma.service';
+import { GetFilterUserRequestDTO } from './DTO/GetFilterUserRequestDTO';
 
 @Injectable()
 export class UserService {
@@ -39,6 +40,17 @@ export class UserService {
       });
       return { users };
     }
+  }
+
+  async filterUsers(getUserDTO: GetFilterUserRequestDTO) {
+    const users = await this.prismService.user.findMany({
+      where: {
+        name: getUserDTO.name,
+        gender: getUserDTO.gender,
+      },
+    });
+
+    return { users };
   }
 
   async editUser(userInfo: EdituserDTO) {
