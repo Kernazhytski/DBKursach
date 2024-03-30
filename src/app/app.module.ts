@@ -4,9 +4,18 @@ import { UserModule } from '../user/user.module';
 import { LaboratoryModule } from '../laboratory/laboratory.module';
 import { CityModule } from '../city/city.module';
 import { CountryModule } from '../country/country.module';
+import { AnalysesModule } from '../analyses/analyses.module';
+import { MetricsModule } from '../metrics/metrics.module';
 
 @Module({
-  imports: [UserModule, LaboratoryModule, CityModule, CountryModule],
+  imports: [
+    UserModule,
+    LaboratoryModule,
+    CityModule,
+    CountryModule,
+    AnalysesModule,
+    MetricsModule,
+  ],
   controllers: [],
   providers: [AppService],
 })
