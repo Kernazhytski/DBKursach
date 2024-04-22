@@ -9,7 +9,6 @@ import {
   Res,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { CreateUserDTO } from './DTO/CreateUserDTO';
 import { Response } from 'express';
 import { GetUserInfoDTO } from './DTO/GetUserInfoDTO';
 import { EdituserDTO } from './DTO/EdituserDTO';
@@ -19,13 +18,6 @@ import { GetFilterUserRequestDTO } from './DTO/GetFilterUserRequestDTO';
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
-
-  @Post('create')
-  async createUser(@Body() userDTO: CreateUserDTO, @Res() res: Response) {
-    await this.userService.createUser(userDTO);
-
-    res.send('ok').status(200);
-  }
 
   @Post('edit')
   async editUser(@Body() userDTO: EdituserDTO, @Res() res: Response) {

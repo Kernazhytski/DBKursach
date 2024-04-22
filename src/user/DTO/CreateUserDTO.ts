@@ -19,4 +19,7 @@ export class CreateUserDTO {
 
   @IsNumber()
   labaratory: number;
+
+  @IsString()
+  password: string;
 }

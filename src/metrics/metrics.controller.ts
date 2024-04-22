@@ -9,7 +9,7 @@ export class MetricsController {
   @Get('getMarks')
   async getMarks(@Query('user_id') user_id: string, @Res() res: Response) {
     const response = await this.metricService.getUserHealthMetrics(user_id);
-    console.log(response);
+
     res.send(response).status(200);
   }
 }

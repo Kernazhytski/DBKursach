@@ -10,4 +10,12 @@ export class CountryService {
 
     return cities;
   }
+
+  async createCountry(name: string) {
+    return this.prismaService.country.create({
+      data: {
+        name,
+      },
+    });
+  }
 }

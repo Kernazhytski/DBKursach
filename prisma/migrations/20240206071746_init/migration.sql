@@ -1,7 +1,7 @@
 -- CreateTable
 CREATE TABLE `City`
 (
-    `id`         INTEGER      NOT NULL,
+    `id`         INTEGER      NOT NULL AUTO_INCREMENT,
     `name`       VARCHAR(191) NOT NULL,
     `country_id` INTEGER      NOT NULL,
 
@@ -12,7 +12,7 @@ CREATE TABLE `City`
 -- CreateTable
 CREATE TABLE `Country`
 (
-    `id`   INTEGER      NOT NULL,
+    `id`   INTEGER      NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(191) NOT NULL,
 
     PRIMARY KEY (`id`)
@@ -22,7 +22,7 @@ CREATE TABLE `Country`
 -- CreateTable
 CREATE TABLE `Labaratory`
 (
-    `id`                INTEGER      NOT NULL,
+    `id`                INTEGER      NOT NULL AUTO_INCREMENT,
     `constructedYear`   INTEGER      NOT NULL,
     `constructedMounth` INTEGER      NOT NULL,
     `constructedDay`    INTEGER      NOT NULL,
@@ -87,6 +87,7 @@ CREATE TABLE `User`
     `mounth`        INTEGER                 NOT NULL,
     `day`           INTEGER                 NOT NULL,
     `labaratory_id` INTEGER                 NOT NULL,
+    `role`         VARCHAR(191)            NOT NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4
@@ -134,34 +135,7 @@ VALUES (1, 'Minsk', 1),
 INSERT INTO `Labaratory` (`id`, `constructedYear`, `constructedMounth`, `constructedDay`, `city_id`, `name`)
 VALUES (1, 2020, 1, 15, 1, 'Lab1'),
        (2, 2018, 3, 22, 2, 'Lab2'),
-       (4, 2021, 7, 19, 4, 'Lab2'),
-       (5, 2021, 8, 23, 5, 'Lab2'),
        (3, 2019, 5, 10, 3, 'Lab3');
-
--- Заполнение таблицы User
-INSERT INTO `User` (`id`, `name`, `gender`, `phone`, `email`, `year`, `mounth`, `day`, `labaratory_id`)
-VALUES ('5cdb7194-38ed-4cc5-b899-23a3917b079d', 'CrossoWar', 'MALE', '123456789', 'user1@example.com', 1990, 5, 20, 1),
-       ('034e23c8-cafd-4e0a-a07a-4097e5afdbe8', 'Alexi', 'FEMALE', '987654321', 'user2@example.com', 1985, 8, 15, 2),
-       ('41430f13-6a7a-4069-a884-9edf4e19ba13', 'Nezox', 'MALE', '555555555', 'user3@example.com', 2000, 2, 8, 3);
-
--- Заполнение таблицы Metrics
-INSERT INTO `Metrics` (`type`, `value`, `created_at`, `user_id`)
-VALUES ('biologicalAgeWithTests', 30.5, '2024-02-06 12:00:00', '5cdb7194-38ed-4cc5-b899-23a3917b079d'),
-       ('commonScrining', 95.2, '2024-02-06 12:15:00', '034e23c8-cafd-4e0a-a07a-4097e5afdbe8'),
-       ('heart', 120.0, '2024-02-06 13:30:00', '41430f13-6a7a-4069-a884-9edf4e19ba13');
-
--- Заполнение таблицы Quiz
-INSERT INTO `Quiz` (`user_id`, `question`, `answer`, `answer_date`)
-VALUES ('5cdb7194-38ed-4cc5-b899-23a3917b079d', 'Weight', 70, '2024-02-06 14:00:00'),
-       ('034e23c8-cafd-4e0a-a07a-4097e5afdbe8', 'Height', 165, '2024-02-06 14:30:00'),
-       ('41430f13-6a7a-4069-a884-9edf4e19ba13', 'WaistCircumference', 80, '2024-02-06 15:00:00');
-
--- Заполнение таблицы TestResults (20)
-INSERT INTO `TestResults` (`id`, `user_id`, `type`, `value`, `unit`, `TestYear`, `TestMounth`, `TestDay`)
-VALUES ('result1', '5cdb7194-38ed-4cc5-b899-23a3917b079d', 'GLUCOSE_IN_BLOOD', 5.2, 'GRAM_PER_LITER', 2024, 1, 5),
-       ('result2', '034e23c8-cafd-4e0a-a07a-4097e5afdbe8', 'TOTAL_CHOLESTEROL', 200.5, 'GRAM_PER_LITER', 2024, 2, 10),
-       ('result3', '41430f13-6a7a-4069-a884-9edf4e19ba13', 'CREATININE_IN_BLOOD', 0.8, 'GRAM_PER_LITER', 2024, 3, 15);
-
 
 CREATE PROCEDURE GetMetricsByUserAndType(IN userId VARCHAR(191),
                                          IN metricType ENUM ('biologicalAgeWithTests', 'biologicalAgeWithoutTests', 'agingRateCoefficient', 'organism', 'commonScrining', 'liver', 'genitourinary', 'heart', 'blood', 'harmonics', 'digestion', 'immunity', 'nervous', 'respiratory'))

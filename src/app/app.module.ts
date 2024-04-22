@@ -6,6 +6,7 @@ import { CityModule } from '../city/city.module';
 import { CountryModule } from '../country/country.module';
 import { AnalysesModule } from '../analyses/analyses.module';
 import { MetricsModule } from '../metrics/metrics.module';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { MetricsModule } from '../metrics/metrics.module';
     CountryModule,
     AnalysesModule,
     MetricsModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [AppService],

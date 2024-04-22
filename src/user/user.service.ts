@@ -13,7 +13,7 @@ export class UserService {
   async createUser(user: CreateUserDTO) {
     const birthDay = new Date(user.birthDay);
 
-    await this.prismService.user.create({
+    const userDB = await this.prismService.user.create({
       data: {
         id: uuidv4(),
         name: user.name,
@@ -24,8 +24,12 @@ export class UserService {
         mounth: birthDay.getMonth(),
         day: birthDay.getDay(),
         labaratory_id: user.labaratory,
+        password: user.password,
+        role: 'USER',
       },
     });
+
+    return userDB.id;
   }
 
   async getUsers(userGet: GetUserInfoDTO) {
