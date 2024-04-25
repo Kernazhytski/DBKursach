@@ -10,12 +10,17 @@ export class LaboratoryService {
   async getLaboratoryinfo(request: GetLaboratoryDTO) {
     const lab_info = await this.prismaSerive.labaratory.findUnique({
       where: { id: parseInt(request.id) },
+      include: {
+        city: {
+          include: {
+            country: true,
+          },
+        },
+      },
     });
 
-    const result = await this.prismaSerive
-      .$executeRaw`SELECT getLabInfoById(${request.id}) as result`;
-    console.log(result);
-    return result;
+    console.log(lab_info);
+    return lab_info;
   }
 
   async getAllLaboratoryInfo() {
