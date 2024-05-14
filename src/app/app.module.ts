@@ -7,6 +7,7 @@ import { CountryModule } from '../country/country.module';
 import { AnalysesModule } from '../analyses/analyses.module';
 import { MetricsModule } from '../metrics/metrics.module';
 import { AuthModule } from '../auth/auth.module';
+import { DocsModule } from '../docs/docs.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { AuthModule } from '../auth/auth.module';
     AnalysesModule,
     MetricsModule,
     AuthModule,
+    DocsModule,
   ],
   controllers: [],
   providers: [AppService],

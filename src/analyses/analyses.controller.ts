@@ -1,7 +1,17 @@
-import { Controller, Get, Query, Res, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Query,
+  Req,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import { AnalysesService } from './analyses.service';
-import { Response } from 'express';
+import { Response, Request } from 'express';
 import { AuthGuard } from '../app/auth.guard';
+import { CreateAnalyseDTO } from './DTO/createAnalyseDTO';
 
 @Controller('analyses')
 export class AnalysesController {
@@ -13,5 +23,28 @@ export class AnalysesController {
     const response = await this.analyseService.getAnalysesForTable(user_id);
 
     res.send(response).status(200);
+  }
+
+  @UseGuards(AuthGuard)
+  @Get('get')
+  async get(@Res() res: Response, @Req() req: Request) {
+    const user_id = req['userId'];
+    const response = await this.analyseService.getAnalysesForTable(user_id);
+
+    res.send(response).status(200);
+  }
+
+  @UseGuards(AuthGuard)
+  @Post('set')
+  async save(
+    @Res() res: Response,
+    @Req() req: Request,
+    @Body() body: CreateAnalyseDTO,
+  ) {
+    console.log('d');
+    const user_id = req['userId'];
+    await this.analyseService.createAnalyse(body, user_id);
+
+    res.send().status(201);
   }
 }
