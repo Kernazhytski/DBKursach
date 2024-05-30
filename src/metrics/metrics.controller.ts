@@ -12,7 +12,7 @@ export class MetricsController {
   async getMarks(@Query('user_id') user_id: string, @Res() res: Response) {
     const response = await this.metricService.getUserHealthMetrics(user_id);
 
-    res.send(response).status(200);
+    res.status(200).send(response);
   }
 
   @UseGuards(AuthGuard)
@@ -21,6 +21,6 @@ export class MetricsController {
     const user_id = req['userId'];
     const response = await this.metricService.getUserHealthMetrics(user_id);
 
-    res.send(response).status(200);
+    res.status(200).send(response);
   }
 }

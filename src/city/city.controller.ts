@@ -14,7 +14,7 @@ export class CityController {
   async getAll(@Res() res: Response) {
     const cities = await this.cityService.getAllCities();
 
-    res.send(cities).status(200);
+    res.status(200).send(cities);
   }
 
   @UseGuards(AdminGuard)
@@ -24,6 +24,6 @@ export class CityController {
     @Body() cityData: CityCreateRequestDTO,
   ) {
     await this.cityService.create(cityData);
-    res.send('ok').status(200);
+    res.status(200).send('ok');
   }
 }

@@ -22,32 +22,30 @@ export class LaboratoryController {
   @UseGuards(AuthGuard)
   @Get('get')
   async getUsers(@Query() getLabDTO: GetLaboratoryDTO, @Res() res: Response) {
-    console.log(getLabDTO);
-    const responce = await this.laboratoryService.getLaboratoryinfo(getLabDTO);
-    console.log(responce);
-    res.send(responce).status(200);
+    const response = await this.laboratoryService.getLaboratoryinfo(getLabDTO);
+
+    res.status(200).send(response);
   }
 
   @Get('getAll')
   async getAllUsers(@Res() res: Response) {
-    const responce = await this.laboratoryService.getAllLaboratoryInfo();
+    const response = await this.laboratoryService.getAllLaboratoryInfo();
 
-    res.send(responce).status(200);
+    res.status(200).send(response);
   }
 
   @UseGuards(AdminGuard)
   @Post('edit')
   async editLaboratories(@Body() body: EditListDTO, @Res() res: Response) {
-    console.log(body);
     await this.laboratoryService.editAll(body.laboratories);
 
-    res.status(200);
+    res.status(200).send();
   }
 
   @UseGuards(AdminGuard)
   @Post('del')
   async delLab(@Body() body: DelLabDTO, @Res() res: Response) {
     await this.laboratoryService.del(body.id);
-    res.send('ok').status(200);
+    res.status(200).send();
   }
 }

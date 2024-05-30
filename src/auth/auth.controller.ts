@@ -13,13 +13,13 @@ export class AuthController {
   async createUser(@Body() userDTO: CreateUserDTO, @Res() res: Response) {
     const response = await this.authService.register(userDTO);
 
-    res.send(response).status(200);
+    res.status(200).send(response);
   }
 
   @UseGuards(AdminGuard)
   @Get('admin')
   async isAdmin(@Res() res: Response) {
-    res.status(200);
+    res.status(200).send();
   }
 
   @Post('login')
@@ -34,8 +34,6 @@ export class AuthController {
       userDTO.password,
     );
 
-    console.log(response);
-
-    res.send(response).status(200);
+    res.status(200).send(response);
   }
 }

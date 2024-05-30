@@ -22,7 +22,7 @@ export class AnalysesController {
   async getTable(@Query('user_id') user_id: string, @Res() res: Response) {
     const response = await this.analyseService.getAnalysesForTable(user_id);
 
-    res.send(response).status(200);
+    res.status(200).send(response);
   }
 
   @UseGuards(AuthGuard)
@@ -41,10 +41,9 @@ export class AnalysesController {
     @Req() req: Request,
     @Body() body: CreateAnalyseDTO,
   ) {
-    console.log('d');
     const user_id = req['userId'];
     await this.analyseService.createAnalyse(body, user_id);
 
-    res.send().status(201);
+    res.status(201).send();
   }
 }

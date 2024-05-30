@@ -14,7 +14,7 @@ export class CountryController {
   async getAll(@Res() res: Response) {
     const countries = await this.countryService.getAllCountries();
 
-    res.send(countries).status(200);
+    res.status(200).send(countries);
   }
 
   @UseGuards(AdminGuard)
@@ -25,6 +25,6 @@ export class CountryController {
   ) {
     await this.countryService.createCountry(countryData.name);
 
-    res.send('OK').status(200);
+    res.status(200).send('OK');
   }
 }

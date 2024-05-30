@@ -19,7 +19,6 @@ export class LaboratoryService {
       },
     });
 
-    console.log(lab_info);
     return lab_info;
   }
 

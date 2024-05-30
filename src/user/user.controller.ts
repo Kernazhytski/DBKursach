@@ -27,16 +27,15 @@ export class UserController {
   async editUser(@Body() userDTO: EdituserDTO, @Res() res: Response) {
     await this.userService.editUser(userDTO);
 
-    res.send('ok').status(200);
+    res.status(200).send('ok');
   }
 
   @UseGuards(AuthGuard)
   @Get('get')
   async getUsers(@Query() getUserDTO: GetUserInfoDTO, @Res() res: Response) {
-    console.log(getUserDTO);
     const responce = await this.userService.getUsers(getUserDTO);
-    console.log(responce);
-    res.send(responce).status(200);
+
+    res.status(200).send(responce);
   }
 
   @UseGuards(AdminGuard)
@@ -44,7 +43,7 @@ export class UserController {
   async deleteUsers(@Param() id: DeleteUserDTO, @Res() res: Response) {
     await this.userService.deleteUser(id.id);
 
-    res.send('Deleted successfully').status(200);
+    res.status(200).send('Deleted successfully');
   }
 
   @UseGuards(AdminGuard)
@@ -56,6 +55,6 @@ export class UserController {
     console.log(getUserDTO);
     const responce = await this.userService.filterUsers(getUserDTO);
 
-    res.send(responce).status(200);
+    res.status(200).send(responce);
   }
 }

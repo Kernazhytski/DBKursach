@@ -13,6 +13,11 @@ export class AnalysesService {
       where: {
         user_id,
       },
+      select: {
+        type: true,
+        value: true,
+        unit: true,
+      },
     });
   }
 

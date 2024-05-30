@@ -6,7 +6,12 @@ export class CountryService {
   constructor(private readonly prismaService: PrismaService) {}
 
   async getAllCountries() {
-    const cities = await this.prismaService.country.findMany();
+    const cities = await this.prismaService.country.findMany({
+      select: {
+        id: true,
+        name: true,
+      },
+    });
 
     return cities;
   }
